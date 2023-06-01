@@ -2,7 +2,7 @@
     "version": "0.2",
     "dumper" : {
         "schedule" : "0 1 * * *", 
-        "data_url" : ["https://storage.googleapis.com/andersen-lab_temp/outbreak_info/new_gr_data.csv.gz"],
+        "data_url" : ["http://su13/outbreak/growth_rate/grs.csv.gz"],
         "uncompress" : true,
         "release": "version:get_release"
     },

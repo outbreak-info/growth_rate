@@ -8,7 +8,7 @@ import pandas as pd
 # if random from [0,1] interval is greater than 0.01 the row will be skipped
 # p = 0.01
 # df = pd.read_csv(
-#     "new_gr_data.csv",
+#     "grs.csv.gz",
 #     index_col=0,
 #     header=0,
 #     skiprows=lambda i: i > 0 and random.random() > p,
@@ -16,7 +16,7 @@ import pandas as pd
 
 
 def load_data(data_folder):
-    json_path = os.path.join(data_folder, "new_gr_data.csv")
+    json_path = os.path.join(data_folder, "grs.csv.gz")
     df = pd.read_csv(json_path, index_col=0, header=0)
     df = df[
         [
@@ -50,7 +50,7 @@ def load_data(data_folder):
     # change date to datetime
     df["date"] = pd.to_datetime(df["date"], format="%Y-%m-%d")
     # last 90 days and fillna with empty string
-    df = df[df.date > (datetime.datetime.now() - pd.to_timedelta("90day"))]
+    df = df[df.date >= (datetime.datetime.now() - pd.to_timedelta("90day"))]
 
     # group by location and lineage
     df = df.groupby(["loc", "lin"]).agg(lambda x: list(x))
