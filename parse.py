@@ -51,8 +51,6 @@ def load_data(data_folder):
     df["date"] = pd.to_datetime(df["date"], format="%Y-%m-%d")
     # last 90 days and fillna with empty string
     df = df[df.date >= (datetime.datetime.now() - pd.to_timedelta("90day"))]
-    # strip empty spaces from location
-    df["loc"] = df["loc"].str.strip()
     # group by location and lineage
     df = df.groupby(["loc", "lin"]).agg(lambda x: list(x))
     # convert date back to string in format YYYY-MM-DD
