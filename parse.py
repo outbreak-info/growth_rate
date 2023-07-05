@@ -37,7 +37,8 @@ def load_data(data_folder):
     df["Prevalence_7_percentage"] = df["Prevalence_7"] * 100
     df["deltaPrevalence_7_percentage"] = df["deltaPrevalence_7"] * 100
     df["G_7_linear"] = (np.exp(df["G_7"]) - 1) * 100
-    df["deltaG_7_linear"] = df["deltaG_7"] * (np.exp(df["deltaG_7"]) - 1) * 100
+    df["deltaG_7_linear"] = df["deltaG_7"] * np.exp(df["G_7"]) * 100
+    df["snr"] = abs(df["G_7_linear"] / df["deltaG_7_linear"])
     df["invDeltaG_7"] = 1 / abs(df["deltaG_7"])
     df["confidenceInterval95"] = df["deltaG_7"] * np.exp(df["G_7"]) * 1.96 * 100
     df["confidenceInterval80"] = df["deltaG_7"] * np.exp(df["G_7"]) * 1.28 * 100
@@ -46,7 +47,7 @@ def load_data(data_folder):
     df["confidenceInterval35"] = df["deltaG_7"] * np.exp(df["G_7"]) * 0.45 * 100
     df["confidenceInterval20"] = df["deltaG_7"] * np.exp(df["G_7"]) * 0.25 * 100
     df["confidenceInterval5"] = df["deltaG_7"] * np.exp(df["G_7"]) * 0.06 * 100
-
+    
     # change date to datetime
     df["date"] = pd.to_datetime(df["date"], format="%Y-%m-%d")
     # last 90 days and fillna with empty string
@@ -104,6 +105,7 @@ def custom_data_mapping(cls):
                 "N_prev_7": {"type": "double"},
                 "Prevalence_7": {"type": "double"},
                 "Prevalence_7_percentage": {"type": "double"},
+                "snr": {"type": "double"},
             }
         },
     }
