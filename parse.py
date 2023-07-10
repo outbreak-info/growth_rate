@@ -47,7 +47,7 @@ def load_data(data_folder):
     df["confidenceInterval35"] = df["deltaG_7"] * np.exp(df["G_7"]) * 0.45 * 100
     df["confidenceInterval20"] = df["deltaG_7"] * np.exp(df["G_7"]) * 0.25 * 100
     df["confidenceInterval5"] = df["deltaG_7"] * np.exp(df["G_7"]) * 0.06 * 100
-    
+
     # change date to datetime
     df["date"] = pd.to_datetime(df["date"], format="%Y-%m-%d")
     # last 90 days and fillna with empty string
