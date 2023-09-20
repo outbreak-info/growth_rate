@@ -23,6 +23,7 @@ def load_data(data_folder):
             "date",
             "loc",
             "lin",
+            "leaf",
             "N_7",
             "deltaN_7",
             "N_prev_7",
@@ -51,14 +52,14 @@ def load_data(data_folder):
     # change date to datetime
     df["date"] = pd.to_datetime(df["date"], format="%Y-%m-%d")
     # last 90 days and fillna with empty string
-    df = df[df.date >= (datetime.datetime.now() - pd.to_timedelta("90day"))]
+    df = df[df["date"] >= (df["date"].max() - pd.to_timedelta("90day"))]
     # group by location and lineage
-    df = df.groupby(["loc", "lin"]).agg(lambda x: list(x))
+    df = df.groupby(["loc", "lin", "leaf"]).agg(lambda x: list(x))
     # convert date back to string in format YYYY-MM-DD
     df["date"] = df["date"].apply(lambda x: [i.strftime("%Y-%m-%d") for i in x])
     df = df.transpose()
     # get loop over columns in dataframe
-    for loc_lin, series in df.items():
+    for loc_lin_leaf, series in df.items():
         record = {}
         # list of dictionaries
         values = []
@@ -69,9 +70,10 @@ def load_data(data_folder):
         for key, value in values_dict.items():
             values.append(value)
 
-        record["_id"] = loc_lin[0] + "_" + loc_lin[1]
-        record["location"] = loc_lin[0]
-        record["lineage"] = loc_lin[1]
+        record["_id"] = loc_lin_leaf[0] + "_" + loc_lin_leaf[1] + "_" + loc_lin_leaf[2]
+        record["location"] = loc_lin_leaf[0]
+        record["lineage"] = loc_lin_leaf[1]
+        record["leaf"] = loc_lin_leaf[2]
         record["values"] = values
 
         yield record
@@ -82,6 +84,7 @@ def custom_data_mapping(cls):
         "date": {"type": "date"},
         "location": {"type": "keyword"},
         "lineage": {"type": "keyword"},
+        "leaf": {"type": "keyword"},
         "values": {
             "properties": {
                 "confidenceInterval5": {"type": "double"},
