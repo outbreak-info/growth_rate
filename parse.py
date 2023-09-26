@@ -70,7 +70,7 @@ def load_data(data_folder):
         for key, value in values_dict.items():
             values.append(value)
 
-        record["_id"] = loc_lin_leaf[0] + "_" + loc_lin_leaf[1] + "_" + loc_lin_leaf[2]
+        record["_id"] = str(loc_lin_leaf[0]) + "_" + str(loc_lin_leaf[1]) + "_" + str(loc_lin_leaf[2])
         record["location"] = loc_lin_leaf[0]
         record["lineage"] = loc_lin_leaf[1]
         record["leaf"] = loc_lin_leaf[2]
